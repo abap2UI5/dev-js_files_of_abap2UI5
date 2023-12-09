@@ -117,7 +117,7 @@ sap.ui.getCore().attachInit( () => {
             sap.z2ui5.oViewPopup.destroy();
         }
         ,
-        PopoverDestroy: () => {
+        PopoverDestroy() {
             if (!sap.z2ui5.oViewPopover) {
                 return;
             }
