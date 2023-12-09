@@ -22,17 +22,17 @@ sap.ui.getCore().attachInit( () => {
                 await this.displayFragment(S_POPUP.XML, 'oViewPopup');
             }
 
-            if (!sap.z2ui5.checkNestAfter && S_VIEW_NEST.XML) {
+            if (!sap.z2ui5.checkNestAfter ) { if ( S_VIEW_NEST.XML) {
                 sap.z2ui5.oController.NestViewDestroy();
                 await this.displayNestedView(S_VIEW_NEST.XML, 'oViewNest', 'S_VIEW_NEST');
                 sap.z2ui5.checkNestAfter = true;
-            }
+            }}
 
-            if (!sap.z2ui5.checkNestAfter2 && S_VIEW_NEST2.XML) {
+            if (!sap.z2ui5.checkNestAfter2) { if ( S_VIEW_NEST2.XML) {
                 sap.z2ui5.oController.NestViewDestroy2();
                 await this.displayNestedView(S_VIEW_NEST2.XML, 'oViewNest2', 'S_VIEW_NEST2');
                 sap.z2ui5.checkNestAfter2 = true;
-            }
+            }}
 
             if (S_POPOVER.XML) {
                 await this.displayFragment(S_POPOVER.XML, 'oViewPopover', S_POPOVER.OPEN_BY_ID);
@@ -281,11 +281,11 @@ sap.ui.getCore().attachInit( () => {
         responseError(response) {
             document.write(response);
         },
-        updateModelIfRequired(paramKey, params) {
-            if (params[paramKey].CHECK_UPDATE_MODEL) {
+        updateModelIfRequired(paramKey, oView) {
+            if (sap.z2ui5.oResponse.PARAMS[paramKey].CHECK_UPDATE_MODEL) {
                 let model = new sap.ui.model.json.JSONModel(sap.z2ui5.oResponse.OVIEWMODEL);
                 model.setSizeLimit(sap.z2ui5.JSON_MODEL_LIMIT);
-                sap.z2ui5[`oView${paramKey}`].setModel(model);
+                oView.setModel(model);
             }
         },
         responseSuccess(response) {
@@ -307,11 +307,11 @@ sap.ui.getCore().attachInit( () => {
                 sap.z2ui5.oController.createView(sap.z2ui5.oResponse.PARAMS.S_VIEW.XML, sap.z2ui5.oResponse.OVIEWMODEL);
             } else {
                 // Update models if needed
-                updateModelIfRequired('S_VIEW', sap.z2ui5.oResponse.PARAMS);
-                updateModelIfRequired('S_VIEW_NEST', sap.z2ui5.oResponse.PARAMS);
-                updateModelIfRequired('S_VIEW_NEST2', sap.z2ui5.oResponse.PARAMS);
-                updateModelIfRequired('S_POPUP', sap.z2ui5.oResponse.PARAMS);
-                updateModelIfRequired('S_POPOVER', sap.z2ui5.oResponse.PARAMS);
+                this.updateModelIfRequired('S_VIEW', sap.z2ui5.oView);
+                this.updateModelIfRequired('S_VIEW_NEST', sap.z2ui5.oViewNest);
+                this.updateModelIfRequired('S_VIEW_NEST2', sap.z2ui5.oViewNest2);
+                this.updateModelIfRequired('S_POPUP', sap.z2ui5.oViewPopup);
+                this.updateModelIfRequired('S_POPOVER', sap.z2ui5.oViewPopover);
 
                 sap.z2ui5.oController.onAfterRendering();
             }
@@ -460,7 +460,7 @@ sap.ui.getCore().attachInit( () => {
     sap.z2ui5.oController.Roundtrip();
     
     sap.z2ui5.onBeforeRoundtrip = [];
-    sap.z2ui5.onBeforeFrontendEvent = [];
+    sap.z2ui5.onBeforeEventFrontend = [];
     
     sap.z2ui5.JSON_MODEL_LIMIT = 100;
     sap.z2ui5.checkLogActive = true;
