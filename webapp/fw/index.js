@@ -151,6 +151,12 @@ sap.ui.getCore().attachInit( () => {
         }
         ,
         onEventFrontend(...args) {
+
+            sap.z2ui5.onBeforeEventFrontend.forEach(item => {
+                if (item !== undefined) {
+                    item(args);
+             } } )
+            
             switch (args[0].EVENT) {
                 case 'CROSS_APP_NAV_TO_PREV_APP':
                     let oCrossAppNavigator = sap.ushell.Container.getService("CrossApplicationNavigation");
@@ -452,9 +458,12 @@ sap.ui.getCore().attachInit( () => {
     // Initialize other properties
     sap.z2ui5.oBody = { APP_START: sap.z2ui5.APP_START };
     sap.z2ui5.oController.Roundtrip();
-
+    
+    sap.z2ui5.onBeforeRoundtrip = [];
+    sap.z2ui5.onBeforeFrontendEvent = [];
+    
     sap.z2ui5.JSON_MODEL_LIMIT = 100;
     sap.z2ui5.checkLogActive = true;
-    sap.z2ui5.onBeforeRoundtrip = [];
+    
 
 });
